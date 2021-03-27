@@ -1,22 +1,34 @@
 <template>
   <div class="container">
     <h1 class="container__title">Форма подачи заявки в отдел сервиса и качества</h1>
-    <div class="container__frame">
+    <div class="container__frame border">
       <form action="#">
         <div class="form__cover">
           <h2 class="form__title">
             Ваш филиал <b class="form__require">*</b>
           </h2>
-          <label>
-            <select class="form__select" name="select" required>
-              <option>Выберите город</option>
-              <option value="Волжский" v-for="city in cities" :key="city.id">
+          <label class="select__label">
+            <select
+              class="form__select border"
+              name="select"
+              v-model="selected"
+              v-bind:disabled="checked"
+              required>
+              <option class="form__option" disabled value="Выберите город">Выберите город</option>
+              <option
+                v-bind:value="city.title"
+                v-for="city in cities"
+                :key="city.id">
                 {{ city.title }}
               </option>
             </select>
           </label>
           <label for="checkbox">
-            <input type="checkbox" id="checkbox" name="online" v-model="checked">Онлайн
+            <input
+              type="checkbox"
+              id="checkbox"
+              name="online"
+              v-model="checked">Онлайн
           </label>
         </div>
         <div class="form__cover">
@@ -29,6 +41,7 @@
               type="radio"
               name="theme"
               value="bad quality"
+              v-model="picked"
               required>
             Недоволен качеством услуг
           </label>
@@ -37,7 +50,8 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="contract cancellation">
+              value="contract cancellation"
+              v-model="picked">
             Расторжение договора
           </label>
           <label>
@@ -45,7 +59,8 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="no activation email">
+              value="no activation email"
+              v-model="picked">
             Не приходит письмо активации на почту
           </label>
           <label>
@@ -53,11 +68,12 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="personal account doesn't work">
+              value="personal account doesn't work"
+              v-model="picked">
             Не работает личный кабинет
           </label>
           <label>
-            <input type="text" placeholder="Другое">
+            <input class="form__theme-input border" type="text" placeholder="Другое">
           </label>
         </div>
         <div class="form__cover">
@@ -66,7 +82,7 @@
           </h2>
           <label>
             <textarea
-              class="form__textarea"
+              class="form__textarea border"
               name=""
               id=""
               cols="30"
@@ -102,6 +118,8 @@ export default {
     return {
       cities: null,
       checked: false,
+      picked: false,
+      selected: 'Выберите город',
     };
   },
   created() {
@@ -131,16 +149,21 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
-  color: #49423d;
+  color: gray;
 }
 
 .container__title {
   margin: 0 0 20px;
+  color: #49423d;
+}
+
+.border {
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  padding: 10px;
 }
 
 .container__frame {
-  border: 1px solid lightgrey;
-  border-radius: 2px;
   padding: 30px;
 }
 
@@ -154,20 +177,47 @@ export default {
   margin: 0 0 10px;
   font-size: 18px;
   font-weight: normal;
+  color: #49423d;
 }
 
 .form__select {
   align-self: flex-start;
   margin-bottom: 10px;
+  width: 250px;
+  color: gray;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select__label {
+  display: block;
+  position: relative;
+}
+
+.select__label::after {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 220px;
+  background-image: url("./images/down-arrow.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 15px;
+  z-index: 3;
+  pointer-events: none;
 }
 
 .form__textarea {
   width: 100%;
+  resize: none;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
 .form__text {
   margin: 0 0 10px;
-  color: gray;
 }
 
 .form__require {
@@ -176,6 +226,12 @@ export default {
 
 .form__theme {
   margin-bottom: 15px;
+}
+
+.form__theme-input {
+  width: 250px;
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 .form__submit {
