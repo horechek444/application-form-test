@@ -14,7 +14,7 @@
               name="select"
               v-model="selected"
               :disabled="checked">
-              <option disabled value="Выберите город">Выберите город</option>
+              <option disabled value="">Выберите город</option>
               <option
                 v-bind:value="city.title"
                 v-for="city in cities"
@@ -127,7 +127,7 @@ export default {
       cities: null,
       checked: null,
       picked: null,
-      selected: 'Выберите город',
+      selected: '',
       anotherTheme: '',
       text: '',
     };
@@ -157,7 +157,7 @@ export default {
     },
     handleCheckbox() {
       if (!this.checked) {
-        this.selected = 'Выберите город';
+        this.selected = '';
       }
     },
     // handleSubmit(data) {
