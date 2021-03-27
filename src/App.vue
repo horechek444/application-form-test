@@ -10,11 +10,11 @@
           <label class="select__label">
             <select
               class="form__select border"
+              required
               name="select"
               v-model="selected"
-              v-bind:disabled="checked"
-              required>
-              <option class="form__option" disabled value="Выберите город">Выберите город</option>
+              :disabled="checked">
+              <option disabled value="Выберите город">Выберите город</option>
               <option
                 v-bind:value="city.title"
                 v-for="city in cities"
@@ -31,6 +31,7 @@
               v-model="checked">Онлайн
           </label>
         </div>
+
         <div class="form__cover">
           <h2 class="form__title">
             Тема обращения <b class="form__require">*</b>
@@ -73,9 +74,14 @@
             Не работает личный кабинет
           </label>
           <label>
-            <input class="form__theme-input border" type="text" placeholder="Другое">
+            <input
+              class="form__theme-input border"
+              type="text"
+              placeholder="Другое"
+              v-model="anotherTheme">
           </label>
         </div>
+
         <div class="form__cover">
           <h2 class="form__title">
             Описание проблемы <b class="form__require">*</b>
@@ -88,10 +94,12 @@
               cols="30"
               rows="10"
               placeholder="Введите текст"
+              v-model="text"
               required>
             </textarea>
           </label>
         </div>
+
         <div class="form__cover">
           <h2 class="form__title">
             Загрузка документов
@@ -117,10 +125,24 @@ export default {
   data() {
     return {
       cities: null,
-      checked: false,
-      picked: false,
+      checked: null,
+      picked: null,
       selected: 'Выберите город',
+      anotherTheme: '',
+      text: '',
     };
+  },
+  watch: {
+    picked(v) {
+      if (v) {
+        this.anotherTheme = '';
+      }
+    },
+    anotherTheme(v) {
+      if (v) {
+        this.picked = null;
+      }
+    },
   },
   created() {
     this.getCities();
@@ -133,6 +155,15 @@ export default {
         console.log(`${err}`);
       }
     },
+    handleCheckbox() {
+      if (!this.checked) {
+        this.selected = 'Выберите город';
+      }
+    },
+    // handleSubmit(data) {
+    //   return
+    //   !!((this.selected || this.checked) && (this.picked || this.anotherTheme) && this.text);
+    // }
   },
 };
 </script>
@@ -193,6 +224,7 @@ export default {
 .select__label {
   display: block;
   position: relative;
+  align-self: flex-start;
 }
 
 .select__label::after {
@@ -214,6 +246,7 @@ export default {
   resize: none;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 .form__text {
@@ -226,6 +259,7 @@ export default {
 
 .form__theme {
   margin-bottom: 15px;
+  align-self: flex-start;
 }
 
 .form__theme-input {
