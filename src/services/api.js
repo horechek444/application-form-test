@@ -16,13 +16,12 @@ class Api {
       });
   }
 
-  sendForm(newArticle) {
+  sendForm(data) {
     return fetch(`${this.baseUrl}/send-form`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
-        title: newArticle.title,
-        text: newArticle.text,
+        data,
       }),
     })
       .then((res) => {

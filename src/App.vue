@@ -7,7 +7,7 @@
           <h2 class="form__title">
             Ваш филиал <b class="form__require">*</b>
           </h2>
-          <label class="select__label">
+          <label class="select__label label">
             <select
               class="form__select border"
               required
@@ -23,11 +23,12 @@
               </option>
             </select>
           </label>
-          <label for="checkbox">
+          <label class="label" for="checkbox">
             <input
               type="checkbox"
               id="checkbox"
               name="online"
+              :required="!selected"
               v-model="checked">Онлайн
           </label>
         </div>
@@ -36,49 +37,53 @@
           <h2 class="form__title">
             Тема обращения <b class="form__require">*</b>
           </h2>
-          <label>
+          <label class="label">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="bad quality"
               v-model="picked"
-              required>
+              :required="!anotherTheme">
             Недоволен качеством услуг
           </label>
-          <label>
+          <label class="label">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="contract cancellation"
-              v-model="picked">
+              v-model="picked"
+              :required="!anotherTheme">
             Расторжение договора
           </label>
-          <label>
+          <label class="label">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="no activation email"
-              v-model="picked">
+              v-model="picked"
+              :required="!anotherTheme">
             Не приходит письмо активации на почту
           </label>
-          <label>
+          <label class="label">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="personal account doesn't work"
-              v-model="picked">
+              v-model="picked"
+              :required="!anotherTheme">
             Не работает личный кабинет
           </label>
-          <label>
+          <label class="label">
             <input
               class="form__theme-input border"
               type="text"
               placeholder="Другое"
-              v-model="anotherTheme">
+              v-model="anotherTheme"
+              :required="!picked">
           </label>
         </div>
 
@@ -86,11 +91,10 @@
           <h2 class="form__title">
             Описание проблемы <b class="form__require">*</b>
           </h2>
-          <label>
+          <label class="label">
             <textarea
               class="form__textarea border"
-              name=""
-              id=""
+              name="text"
               cols="30"
               rows="10"
               placeholder="Введите текст"
@@ -107,9 +111,13 @@
           <p class="form__text">Приложите, пожалуйста, полноэкранный скриншот.
             <br/>Это поможет быстрее решить проблему.
           </p>
-          <input type="file">
+          <input type="file" @change="onFileSelected">
         </div>
-        <input class="form__submit" type="submit" value="Отправить">
+        <input
+          class="form__submit"
+          type="submit"
+          value="Отправить"
+          :disabled="(!selected || !checked) && (!picked || !anotherTheme) && !text">
       </form>
     </div>
   </div>
@@ -130,6 +138,7 @@ export default {
       selected: '',
       anotherTheme: '',
       text: '',
+      selectedFile: null,
     };
   },
   watch: {
@@ -141,6 +150,11 @@ export default {
     anotherTheme(v) {
       if (v) {
         this.picked = null;
+      }
+    },
+    checked(v) {
+      if (v) {
+        this.selected = '';
       }
     },
   },
@@ -155,15 +169,16 @@ export default {
         console.log(`${err}`);
       }
     },
-    handleCheckbox() {
-      if (!this.checked) {
-        this.selected = '';
+    async sendForm(data) {
+      try {
+        this.data = await api.sendForm(data);
+      } catch (err) {
+        console.log(`${err}`);
       }
     },
-    // handleSubmit(data) {
-    //   return
-    //   !!((this.selected || this.checked) && (this.picked || this.anotherTheme) && this.text);
-    // }
+    onFileSelected(event) {
+      this.selectedFile.files[0] = event.target;
+    },
   },
 };
 </script>
@@ -176,6 +191,7 @@ export default {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -196,6 +212,7 @@ export default {
 
 .container__frame {
   padding: 30px;
+  align-self: stretch;
 }
 
 .form__cover {
@@ -224,7 +241,6 @@ export default {
 .select__label {
   display: block;
   position: relative;
-  align-self: flex-start;
 }
 
 .select__label::after {
@@ -259,7 +275,6 @@ export default {
 
 .form__theme {
   margin-bottom: 15px;
-  align-self: flex-start;
 }
 
 .form__theme-input {
@@ -277,5 +292,10 @@ export default {
   box-shadow: none;
   border-radius: 2px;
   font-weight: bold;
+}
+
+.form__submit:disabled {
+  background-color: lightgrey;
+  color: rgba(255, 255, 255, 0.7);
 }
 </style>
