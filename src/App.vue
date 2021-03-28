@@ -117,19 +117,23 @@
           class="form__submit"
           type="submit"
           value="Отправить"
+          @click="showModal"
           :disabled="(!selected || !checked) && (!picked || !anotherTheme) && !text">
       </form>
     </div>
+    <modal-window ref="modal"></modal-window>
   </div>
 </template>
 
 <script>
-
+import ModalWindow from './components/modal-window.vue';
 import api from './services/api';
 
 export default {
   name: 'App',
-  components: {},
+  components: {
+    ModalWindow,
+  },
   data() {
     return {
       cities: null,
@@ -178,6 +182,9 @@ export default {
     },
     onFileSelected(event) {
       this.selectedFile.files[0] = event.target;
+    },
+    showModal() {
+      this.$refs.modal.show = true;
     },
   },
 };
@@ -253,7 +260,6 @@ export default {
   background-repeat: no-repeat;
   width: 25px;
   height: 15px;
-  z-index: 3;
   pointer-events: none;
 }
 
