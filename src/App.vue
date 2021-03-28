@@ -12,8 +12,8 @@
               class="form__select border"
               required
               name="select"
-              v-model="selected"
-              :disabled="checked">
+              v-model="formData.selected"
+              :disabled="formData.checked">
               <option disabled value="">Выберите город</option>
               <option
                 v-bind:value="city.title"
@@ -28,8 +28,8 @@
               type="checkbox"
               id="checkbox"
               name="online"
-              :required="!selected"
-              v-model="checked">Онлайн
+              :required="!formData.selected"
+              v-model="formData.checked">Онлайн
           </label>
         </div>
 
@@ -43,8 +43,8 @@
               type="radio"
               name="theme"
               value="bad quality"
-              v-model="picked"
-              :required="!anotherTheme">
+              v-model="formData.picked"
+              :required="!formData.anotherTheme">
             Недоволен качеством услуг
           </label>
           <label class="label">
@@ -53,8 +53,8 @@
               type="radio"
               name="theme"
               value="contract cancellation"
-              v-model="picked"
-              :required="!anotherTheme">
+              v-model="formData.picked"
+              :required="!formData.anotherTheme">
             Расторжение договора
           </label>
           <label class="label">
@@ -63,8 +63,8 @@
               type="radio"
               name="theme"
               value="no activation email"
-              v-model="picked"
-              :required="!anotherTheme">
+              v-model="formData.picked"
+              :required="!formData.anotherTheme">
             Не приходит письмо активации на почту
           </label>
           <label class="label">
@@ -73,8 +73,8 @@
               type="radio"
               name="theme"
               value="personal account doesn't work"
-              v-model="picked"
-              :required="!anotherTheme">
+              v-model="formData.picked"
+              :required="!formData.anotherTheme">
             Не работает личный кабинет
           </label>
           <label class="label">
@@ -82,8 +82,8 @@
               class="form__theme-input border"
               type="text"
               placeholder="Другое"
-              v-model="anotherTheme"
-              :required="!picked">
+              v-model="formData.anotherTheme"
+              :required="!formData.picked">
           </label>
         </div>
 
@@ -98,7 +98,7 @@
               cols="30"
               rows="10"
               placeholder="Введите текст"
-              v-model="text"
+              v-model="formData.text"
               required>
             </textarea>
           </label>
@@ -118,7 +118,8 @@
           type="submit"
           value="Отправить"
           @click="showModal"
-          :disabled="(!selected || !checked) && (!picked || !anotherTheme) && !text">
+          :disabled="(!formData.selected || !formData.checked) &&
+          (!formData.picked || !formData.anotherTheme) && !formData.text">
       </form>
     </div>
     <modal-window ref="modal"></modal-window>
@@ -137,28 +138,30 @@ export default {
   data() {
     return {
       cities: null,
-      checked: null,
-      picked: null,
-      selected: '',
-      anotherTheme: '',
-      text: '',
-      selectedFile: null,
+      formData: {
+        checked: null,
+        picked: null,
+        selected: '',
+        anotherTheme: '',
+        text: '',
+        selectedFile: null,
+      },
     };
   },
   watch: {
     picked(v) {
       if (v) {
-        this.anotherTheme = '';
+        this.formData.anotherTheme = '';
       }
     },
     anotherTheme(v) {
       if (v) {
-        this.picked = null;
+        this.formData.picked = null;
       }
     },
     checked(v) {
       if (v) {
-        this.selected = '';
+        this.formData.selected = '';
       }
     },
   },
@@ -181,7 +184,7 @@ export default {
       }
     },
     onFileSelected(event) {
-      this.selectedFile.files[0] = event.target;
+      this.formData.selectedFile.files[0] = event.target;
     },
     showModal() {
       this.$refs.modal.show = true;
