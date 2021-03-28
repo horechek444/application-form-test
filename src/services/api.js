@@ -16,20 +16,17 @@ class Api {
       });
   }
 
-  sendForm(data) {
-    return fetch(`${this.baseUrl}/send-form`, {
+  async sendForm(data) {
+    const res = await fetch(`${this.baseUrl}/send-form`, {
       method: 'POST',
       headers: this.headers,
-      body: JSON.stringify({
-        data,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return new Error(`Ошибка: ${res.status}`);
-      });
+      body: JSON.stringify({ data }),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      return new Error(`Ошибка: ${res.status}`);
+    }
+    return json;
   }
 }
 

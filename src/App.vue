@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="container__title">Форма подачи заявки в отдел сервиса и качества</h1>
     <div class="container__frame border">
-      <form action="#">
+      <form action="#" @submit="onSubmit">
         <div class="form__cover">
           <h2 class="form__title">
             Ваш филиал <b class="form__require">*</b>
@@ -42,7 +42,7 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="bad quality"
+              value="Недоволен качеством услуг"
               v-model="formData.picked"
               :required="!formData.anotherTheme">
             Недоволен качеством услуг
@@ -52,7 +52,7 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="contract cancellation"
+              value="Расторжение договора"
               v-model="formData.picked"
               :required="!formData.anotherTheme">
             Расторжение договора
@@ -62,7 +62,7 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="no activation email"
+              value="Не приходит письмо активации на почту"
               v-model="formData.picked"
               :required="!formData.anotherTheme">
             Не приходит письмо активации на почту
@@ -72,7 +72,7 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="personal account doesn't work"
+              value="Не работает личный кабинет"
               v-model="formData.picked"
               :required="!formData.anotherTheme">
             Не работает личный кабинет
@@ -117,7 +117,6 @@
           class="form__submit"
           type="submit"
           value="Отправить"
-          @click="showModal"
           :disabled="(!formData.selected || !formData.checked) &&
           (!formData.picked || !formData.anotherTheme) && !formData.text">
       </form>
@@ -154,16 +153,16 @@ export default {
         this.formData.anotherTheme = '';
       }
     },
-    anotherTheme(v) {
-      if (v) {
-        this.formData.picked = null;
-      }
-    },
-    checked(v) {
-      if (v) {
-        this.formData.selected = '';
-      }
-    },
+    // anotherTheme(v) {
+    //   if (v) {
+    //     this.formData.picked = null;
+    //   }
+    // },
+    // checked(v) {
+    //   if (v) {
+    //     this.formData.selected = '';
+    //   }
+    // },
   },
   created() {
     this.getCities();
@@ -176,18 +175,33 @@ export default {
         console.log(`${err}`);
       }
     },
-    async sendForm(data) {
-      try {
-        this.data = await api.sendForm(data);
-      } catch (err) {
-        console.log(`${err}`);
-      }
+    sendForm(data) {
+      api.sendForm(data)
+        .then((json) => {
+          if (json.success) {
+            this.$refs.modal.show = true;
+          } else {
+            alert('Ошибка отправки заявки');
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     onFileSelected(event) {
       this.formData.selectedFile.files[0] = event.target;
     },
-    showModal() {
-      this.$refs.modal.show = true;
+    onSubmit(event) {
+      event.preventDefault();
+      this.sendForm(JSON.stringify(this.formData));
+      this.formData = {
+        checked: null,
+        picked: null,
+        selected: '',
+        anotherTheme: '',
+        text: '',
+        selectedFile: null,
+      };
     },
   },
 };
