@@ -7,7 +7,7 @@
           <h2 class="form__title">
             Ваш филиал <b class="form__require">*</b>
           </h2>
-          <label class="select__label form__label">
+          <label class="select__label">
             <select
               class="form__select border"
               required
@@ -23,13 +23,14 @@
               </option>
             </select>
           </label>
-          <label class="form__label" for="checkbox">
+          <label class="form__label">
             <input
+              class="form__online"
               type="checkbox"
-              id="checkbox"
               name="online"
               :required="!formData.selected"
-              v-model="formData.checked">Онлайн
+              v-model="formData.checked">
+              <span class="form__checkbox"></span>Онлайн
           </label>
         </div>
 
@@ -325,5 +326,40 @@ export default {
 .form__submit:disabled {
   background-color: lightgrey;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.form__online {
+  position: absolute;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form__checkbox {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #49423d;
+  border-radius: 1px;
+  background-color: transparent;
+  margin-left: -28px;
+}
+
+.form__label {
+  padding-left: 28px;
+}
+
+.form__online:checked + .form__checkbox {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #49423d;
+  border-radius: 1px;
+  background-color: transparent;
+  margin-left: -28px;
+  background-image: url('./images/check-mark-black-outline-min.svg');
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>
