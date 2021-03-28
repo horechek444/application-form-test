@@ -7,7 +7,7 @@
           <h2 class="form__title">
             Ваш филиал <b class="form__require">*</b>
           </h2>
-          <label class="select__label label">
+          <label class="select__label form__label">
             <select
               class="form__select border"
               required
@@ -23,7 +23,7 @@
               </option>
             </select>
           </label>
-          <label class="label" for="checkbox">
+          <label class="form__label" for="checkbox">
             <input
               type="checkbox"
               id="checkbox"
@@ -37,7 +37,7 @@
           <h2 class="form__title">
             Тема обращения <b class="form__require">*</b>
           </h2>
-          <label class="label">
+          <label class="form__label">
             <input
               class="form__theme"
               type="radio"
@@ -47,7 +47,7 @@
               :required="!formData.anotherTheme">
             Недоволен качеством услуг
           </label>
-          <label class="label">
+          <label class="form__label">
             <input
               class="form__theme"
               type="radio"
@@ -57,7 +57,7 @@
               :required="!formData.anotherTheme">
             Расторжение договора
           </label>
-          <label class="label">
+          <label class="form__label">
             <input
               class="form__theme"
               type="radio"
@@ -67,7 +67,7 @@
               :required="!formData.anotherTheme">
             Не приходит письмо активации на почту
           </label>
-          <label class="label">
+          <label class="form__label">
             <input
               class="form__theme"
               type="radio"
@@ -77,7 +77,7 @@
               :required="!formData.anotherTheme">
             Не работает личный кабинет
           </label>
-          <label class="label">
+          <label class="form__label">
             <input
               class="form__theme-input border"
               type="text"
@@ -91,7 +91,7 @@
           <h2 class="form__title">
             Описание проблемы <b class="form__require">*</b>
           </h2>
-          <label class="label">
+          <label class="form__label">
             <textarea
               class="form__textarea border"
               name="text"
@@ -148,21 +148,21 @@ export default {
     };
   },
   watch: {
-    picked(v) {
+    'formData.picked': function (v) {
       if (v) {
         this.formData.anotherTheme = '';
       }
     },
-    // anotherTheme(v) {
-    //   if (v) {
-    //     this.formData.picked = null;
-    //   }
-    // },
-    // checked(v) {
-    //   if (v) {
-    //     this.formData.selected = '';
-    //   }
-    // },
+    'formData.anotherTheme': function (v) {
+      if (v) {
+        this.formData.picked = null;
+      }
+    },
+    'formData.checked': function (v) {
+      if (v) {
+        this.formData.selected = '';
+      }
+    },
   },
   created() {
     this.getCities();
@@ -193,6 +193,7 @@ export default {
     },
     onSubmit(event) {
       event.preventDefault();
+      console.log(this.formData);
       this.sendForm(JSON.stringify(this.formData));
       this.formData = {
         checked: null,
@@ -208,9 +209,13 @@ export default {
 </script>
 
 <style>
+.body {
+  margin: 0;
+}
+
 .container {
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 10px 20px 20px;
   max-width: 1240px;
   min-height: 100vh;
   display: flex;

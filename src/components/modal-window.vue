@@ -1,15 +1,15 @@
 <template>
   <transition name="modal">
-    <div v-if="show" class="modal-shadow" @click.self="closeModal">
+    <div v-if="show" class="modal__layout" @click.self="closeModal">
       <div class="modal">
-        <span class="modal-close" @click="closeModal"></span>
+        <span class="modal__close" @click="closeModal"></span>
         <slot name="title">
-          <h3 class="modal-title">Заявка отправлена.</h3>
+          <h3 class="modal__title">Заявка отправлена.</h3>
         </slot>
         <slot name="body">
-          <div class="modal-content">
-            <img src="../images/success_img.png" alt="Успешная отправка данных">
-          </div>
+          <img
+            class="modal__content"
+            src="../images/success_img.png" alt="Успешная отправка данных">
         </slot>
       </div>
     </div>
@@ -33,8 +33,8 @@ export default {
 </script>
 
 <style>
-.modal-shadow {
-  position: absolute;
+.modal__layout {
+  position: fixed;
   top: 0;
   left: 0;
   min-height: 100%;
@@ -56,7 +56,7 @@ export default {
   z-index: 50;
 }
 
-.modal-close {
+.modal__close {
   position: absolute;
   right: 18px;
   top: 18px;
@@ -64,10 +64,12 @@ export default {
   height: 25px;
   z-index: 6;
 }
-.modal-close:hover {
+
+.modal__close:hover {
   opacity: 1;
 }
-.modal-close:before, .modal-close:after {
+
+.modal__close:before, .modal__close:after {
   position: absolute;
   left: 11px;
   content: ' ';
@@ -75,18 +77,21 @@ export default {
   width: 2px;
   background-color: #333333;
 }
-.modal-close:before {
+
+.modal__close:before {
   transform: rotate(45deg);
 }
-.modal-close:after {
+
+.modal__close:after {
   transform: rotate(-45deg);
 }
-.modal-title {
+
+.modal__title {
   color: #49423d;
   font-size: 16px;
 }
 
-.modal-content {
+.modal__content {
   margin-bottom: 20px
 }
 
