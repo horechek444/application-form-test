@@ -1,11 +1,19 @@
 <template>
   <div class="container">
-    <h1 class="container__title">Форма подачи заявки в отдел сервиса и качества</h1>
-    <div class="container__frame border">
-      <form action="#" @submit="onSubmit">
+    <h1 class="container__title">
+      Форма подачи заявки в отдел сервиса и качества
+    </h1>
+    <div class="container__frame">
+      <form
+        class="form"
+        action="#"
+        @submit="onSubmit">
         <div class="form__cover">
           <h2 class="form__title">
-            Ваш филиал <b class="form__require">*</b>
+            Ваш филиал
+            <b class="form__require">
+              *
+            </b>
           </h2>
           <label class="select__label">
             <select
@@ -13,8 +21,11 @@
               required
               name="select"
               v-model="formData.selected"
-              :disabled="formData.checked">
-              <option disabled value="">Выберите город</option>
+              :disabled="formData.checked"
+            >
+              <option disabled value="">
+                Выберите город
+              </option>
               <option
                 v-bind:value="city.title"
                 v-for="city in cities"
@@ -23,59 +34,72 @@
               </option>
             </select>
           </label>
-          <label class="form__label">
+          <label class="form__label label__checkbox">
             <input
               class="form__online"
               type="checkbox"
               name="online"
               :required="!formData.selected"
-              v-model="formData.checked">
-              <span class="form__checkbox"></span>Онлайн
+              v-model="formData.checked"
+            >
+            <span class="form__checkbox"></span>
+            Онлайн
           </label>
         </div>
 
         <div class="form__cover">
           <h2 class="form__title">
-            Тема обращения <b class="form__require">*</b>
+            Тема обращения
+            <b class="form__require">
+              *
+            </b>
           </h2>
-          <label class="form__label">
+          <label class="form__label label__radio">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="Недоволен качеством услуг"
               v-model="formData.picked"
-              :required="!formData.anotherTheme">
+              :required="!formData.anotherTheme"
+            >
+            <span class="form__radio"></span>
             Недоволен качеством услуг
           </label>
-          <label class="form__label">
+          <label class="form__label label__radio">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="Расторжение договора"
               v-model="formData.picked"
-              :required="!formData.anotherTheme">
+              :required="!formData.anotherTheme"
+            >
+            <span class="form__radio"></span>
             Расторжение договора
           </label>
-          <label class="form__label">
+          <label class="form__label label__radio">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="Не приходит письмо активации на почту"
               v-model="formData.picked"
-              :required="!formData.anotherTheme">
+              :required="!formData.anotherTheme"
+            >
+            <span class="form__radio"></span>
             Не приходит письмо активации на почту
           </label>
-          <label class="form__label">
+          <label class="form__label label__radio">
             <input
               class="form__theme"
               type="radio"
               name="theme"
               value="Не работает личный кабинет"
               v-model="formData.picked"
-              :required="!formData.anotherTheme">
+              :required="!formData.anotherTheme"
+            >
+            <span class="form__radio"></span>
             Не работает личный кабинет
           </label>
           <label class="form__label">
@@ -84,13 +108,17 @@
               type="text"
               placeholder="Другое"
               v-model="formData.anotherTheme"
-              :required="!formData.picked">
+              :required="!formData.picked"
+            >
           </label>
         </div>
 
         <div class="form__cover">
           <h2 class="form__title">
-            Описание проблемы <b class="form__require">*</b>
+            Описание проблемы
+            <b class="form__require">
+              *
+            </b>
           </h2>
           <label class="form__label">
             <textarea
@@ -100,6 +128,7 @@
               rows="10"
               placeholder="Введите текст"
               v-model="formData.text"
+              @change="onSubmitDisabled"
               required>
             </textarea>
           </label>
@@ -109,20 +138,24 @@
           <h2 class="form__title">
             Загрузка документов
           </h2>
-          <p class="form__text">Приложите, пожалуйста, полноэкранный скриншот.
+          <p class="form__text">
+            Приложите, пожалуйста, полноэкранный скриншот.
             <br/>Это поможет быстрее решить проблему.
           </p>
-          <input type="file" @change="onFileSelected">
+          <input
+            class="form__file"
+            type="file"
+            @change="onSubmitDisabled"
+          >
         </div>
         <input
           class="form__submit"
           type="submit"
           value="Отправить"
-          :disabled="(!formData.selected || !formData.checked) &&
-          (!formData.picked || !formData.anotherTheme) && !formData.text">
+          :disabled="isActive">
       </form>
     </div>
-    <modal-window ref="modal"></modal-window>
+    <ModalWindow ref="modal"></ModalWindow>
   </div>
 </template>
 
@@ -138,6 +171,7 @@ export default {
   data() {
     return {
       cities: null,
+      isActive: true,
       formData: {
         checked: null,
         picked: null,
@@ -190,7 +224,8 @@ export default {
         });
     },
     onFileSelected(event) {
-      this.formData.selectedFile.files[0] = event.target;
+      const useFile = event.target.files[0];
+      this.formData.selectedFile = useFile;
     },
     onSubmit(event) {
       event.preventDefault();
@@ -204,6 +239,13 @@ export default {
         text: '',
         selectedFile: null,
       };
+    },
+    onSubmitDisabled() {
+      if ((this.formData.selected || this.formData.selected !== '' || this.formData.checked)
+        && (this.formData.picked || this.formData.anotherTheme) && this.formData.text) {
+        this.isActive = false;
+      }
+      return this.isActive;
     },
   },
 };
@@ -225,8 +267,12 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
   font-size: 14px;
-  color: gray;
+  color: rgba(128, 128, 128, 1);
 }
 
 .container__title {
@@ -235,20 +281,44 @@ export default {
 }
 
 .border {
-  border: 1px solid lightgrey;
+  border: 1px solid rgba(211, 211, 211, 1);
   border-radius: 2px;
   padding: 10px;
+}
+
+.border:hover {
+  border: 1px solid rgba(211, 211, 211, 0.5);
 }
 
 .container__frame {
   padding: 30px;
   align-self: stretch;
+  border: 1px solid rgba(211, 211, 211, 1);
+  border-radius: 2px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .form__cover {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+}
+
+.form__cover:nth-child(3) {
+  align-self: stretch;
+}
+
+.form__cover:nth-child(3) > .form__label {
+  align-self: stretch;
+}
+
+.form__label:hover {
+  color: rgba(128, 128, 128, 0.5);
 }
 
 .form__title {
@@ -266,6 +336,20 @@ export default {
   font-size: 14px;
   appearance: none;
   cursor: pointer;
+}
+
+.form__select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
+}
+
+.form__select:disabled {
+  background-color: #ededed;
+  cursor: default;
+}
+
+.form__select:disabled:hover {
+  border: 1px solid rgba(211, 211, 211, 1);
 }
 
 .select__label {
@@ -288,10 +372,16 @@ export default {
 
 .form__textarea {
   width: 100%;
+  min-width: 100%;
   resize: none;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   font-size: 14px;
   box-sizing: border-box;
+}
+
+.form__textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
 }
 
 .form__text {
@@ -302,20 +392,22 @@ export default {
   color: red;
 }
 
-.form__theme {
-  margin-bottom: 15px;
-}
-
 .form__theme-input {
   width: 250px;
   box-sizing: border-box;
   font-size: 14px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+
+.form__theme-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
 }
 
 .form__submit {
   padding: 10px 20px;
   text-transform: uppercase;
-  background-color: coral;
+  background-color: rgba(250, 137, 7, 1);
   color: white;
   border: none;
   box-shadow: none;
@@ -328,38 +420,94 @@ export default {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.form__online {
-  position: absolute;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+.form__submit:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
 }
 
-.form__checkbox {
+.form__submit:hover {
+  background-color: rgba(250, 137, 7, 0.5);
+}
+
+.form__submit:disabled:hover {
+  background-color: lightgrey;
+}
+
+.form__online,
+.form__theme {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.form__checkbox,
+.form__radio {
   position: absolute;
   width: 14px;
   height: 14px;
-  border: 1px solid #49423d;
+  border: 1px solid rgba(73, 66, 61, 1);;
   border-radius: 1px;
   background-color: transparent;
   margin-left: -28px;
 }
 
-.form__label {
+.form__checkbox:hover,
+.form__radio:hover {
+  border: 1px solid rgba(73, 66, 61, 0.5);
+}
+
+.form__radio {
+  border-radius: 50%;
+}
+
+.label__checkbox,
+.label__radio {
   padding-left: 28px;
 }
 
+.label__radio {
+  margin-bottom: 15px;
+}
+
+.form__theme:checked + .form__radio,
 .form__online:checked + .form__checkbox {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border: 1px solid #49423d;
-  border-radius: 1px;
-  background-color: transparent;
-  margin-left: -28px;
-  background-image: url('./images/check-mark-black-outline-min.svg');
-  background-size: 75%;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.form__theme:checked + .form__radio {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" height="100" width="100"%3E%3Ccircle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="black" /%3E%3C/svg%3E');
+  background-size: 70%;
+}
+
+.form__online:checked + .form__checkbox {
+  background-image: url('images/check-mark-black.svg');
+  background-size: 75%;
+}
+
+.form__theme:focus + .form__radio,
+.form__online:focus + .form__checkbox {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
+}
+
+.form__theme:disabled + .form__radio,
+.form__online:disabled + .form__checkbox {
+  border: 1px solid lightgrey;
+}
+
+.form__theme:checked:disabled + .form__radio {
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" height="100" width="100"%3E%3Ccircle cx="50" cy="50" r="40" stroke="lightgrey" stroke-width="3" fill="lightgrey" /%3E%3C/svg%3E');
+}
+
+.form__online:checked:disabled + .form__checkbox {
+  background-image: url('images/check-mark-disabled.svg');
+}
+
+.form__file:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px cadetblue;
 }
 </style>

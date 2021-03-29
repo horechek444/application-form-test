@@ -69,7 +69,8 @@ export default {
   opacity: 1;
 }
 
-.modal__close:before, .modal__close:after {
+.modal__close:before,
+.modal__close:after {
   position: absolute;
   left: 11px;
   content: ' ';
