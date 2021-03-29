@@ -193,7 +193,7 @@ export default {
     },
   },
   watch: {
-    'formData.picked': function (v) {
+    'formData.theme': function (v) {
       if (v) {
         this.formData.anotherTheme = '';
       }
@@ -203,7 +203,7 @@ export default {
         this.formData.theme = null;
       }
     },
-    'formData.checked': function (v) {
+    'formData.online': function (v) {
       if (v) {
         this.formData.city = '';
       }
