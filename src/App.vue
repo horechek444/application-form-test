@@ -19,15 +19,15 @@
             <select
               class="form__select border"
               required
-              name="select"
-              v-model="formData.selected"
-              :disabled="formData.checked"
+              name="city"
+              v-model="formData.city"
+              :disabled="formData.online"
             >
               <option disabled value="">
                 Выберите город
               </option>
               <option
-                v-bind:value="city.title"
+                v-bind:value="city.id"
                 v-for="city in cities"
                 :key="city.id">
                 {{ city.title }}
@@ -39,8 +39,8 @@
               class="form__online"
               type="checkbox"
               name="online"
-              :required="!formData.selected"
-              v-model="formData.checked"
+              :required="!formData.city"
+              v-model="formData.online"
             >
             <span class="form__checkbox"></span>
             Онлайн
@@ -59,8 +59,9 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="Недоволен качеством услуг"
-              v-model="formData.picked"
+              id="DissatisfiedWithTheQuality"
+              value="DissatisfiedWithTheQuality"
+              v-model="formData.theme"
               :required="!formData.anotherTheme"
             >
             <span class="form__radio"></span>
@@ -71,8 +72,9 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="Расторжение договора"
-              v-model="formData.picked"
+              id="TerminationOfTheContract"
+              value="TerminationOfTheContract"
+              v-model="formData.theme"
               :required="!formData.anotherTheme"
             >
             <span class="form__radio"></span>
@@ -83,8 +85,9 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="Не приходит письмо активации на почту"
-              v-model="formData.picked"
+              id="DoNotReceive"
+              value="DoNotReceive"
+              v-model="formData.theme"
               :required="!formData.anotherTheme"
             >
             <span class="form__radio"></span>
@@ -95,8 +98,9 @@
               class="form__theme"
               type="radio"
               name="theme"
-              value="Не работает личный кабинет"
-              v-model="formData.picked"
+              id="DoNotWork"
+              value="DoNotWork"
+              v-model="formData.theme"
               :required="!formData.anotherTheme"
             >
             <span class="form__radio"></span>
@@ -108,7 +112,7 @@
               type="text"
               placeholder="Другое"
               v-model="formData.anotherTheme"
-              :required="!formData.picked"
+              :required="!formData.theme"
             >
           </label>
         </div>
@@ -170,9 +174,9 @@ export default {
     return {
       cities: null,
       formData: {
-        checked: null,
-        picked: null,
-        selected: '',
+        online: null,
+        theme: null,
+        city: '',
         anotherTheme: '',
         text: '',
         selectedFile: null,
@@ -181,8 +185,8 @@ export default {
   },
   computed: {
     isButtonActive() {
-      if ((this.formData.selected || this.formData.selected !== '' || this.formData.checked)
-        && (this.formData.picked || this.formData.anotherTheme) && this.formData.text) {
+      if ((this.formData.city || this.formData.city !== '' || this.formData.online)
+        && (this.formData.theme || this.formData.anotherTheme) && this.formData.text) {
         return false;
       }
       return true;
@@ -196,12 +200,12 @@ export default {
     },
     'formData.anotherTheme': function (v) {
       if (v) {
-        this.formData.picked = null;
+        this.formData.theme = null;
       }
     },
     'formData.checked': function (v) {
       if (v) {
-        this.formData.selected = '';
+        this.formData.city = '';
       }
     },
   },
@@ -238,9 +242,9 @@ export default {
       console.log(this.formData);
       this.sendForm(JSON.stringify(this.formData));
       this.formData = {
-        checked: null,
-        picked: null,
-        selected: '',
+        online: null,
+        theme: null,
+        city: '',
         anotherTheme: '',
         text: '',
         selectedFile: null,
