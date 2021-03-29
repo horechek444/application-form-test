@@ -148,6 +148,8 @@
           <input
             class="form__file"
             type="file"
+            name="file"
+            @change="onFileSelected"
           >
         </div>
         <input
@@ -230,17 +232,19 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log(`${err}`);
         });
     },
     onFileSelected(event) {
-      const useFile = event.target.files[0];
-      this.formData.selectedFile = useFile;
+      const file = event.target.files[0];
+      const fd = new FormData();
+      fd.append('file', file);
+      this.formData.selectedFile = fd;
     },
     onSubmit(event) {
       event.preventDefault();
       console.log(this.formData);
-      this.sendForm(JSON.stringify(this.formData));
+      this.sendForm(this.formData);
       this.formData = {
         online: null,
         theme: null,

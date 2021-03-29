@@ -33,7 +33,8 @@ class Api {
 const api = new Api({
   baseUrl: 'https://60254fac36244d001797bfe8.mockapi.io/api/v1',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'multipart/form-data',
+    'Access-Control-Allow-Origin': true,
   },
 });
 
