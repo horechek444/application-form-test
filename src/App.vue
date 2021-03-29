@@ -128,7 +128,6 @@
               rows="10"
               placeholder="Введите текст"
               v-model="formData.text"
-              @change="onSubmitDisabled"
               required>
             </textarea>
           </label>
@@ -145,14 +144,13 @@
           <input
             class="form__file"
             type="file"
-            @change="onSubmitDisabled"
           >
         </div>
         <input
           class="form__submit"
           type="submit"
           value="Отправить"
-          :disabled="isActive">
+          :disabled="isButtonActive">
       </form>
     </div>
     <ModalWindow ref="modal"></ModalWindow>
@@ -171,7 +169,6 @@ export default {
   data() {
     return {
       cities: null,
-      isActive: true,
       formData: {
         checked: null,
         picked: null,
@@ -181,6 +178,15 @@ export default {
         selectedFile: null,
       },
     };
+  },
+  computed: {
+    isButtonActive() {
+      if ((this.formData.selected || this.formData.selected !== '' || this.formData.checked)
+        && (this.formData.picked || this.formData.anotherTheme) && this.formData.text) {
+        return false;
+      }
+      return true;
+    },
   },
   watch: {
     'formData.picked': function (v) {
@@ -239,13 +245,6 @@ export default {
         text: '',
         selectedFile: null,
       };
-    },
-    onSubmitDisabled() {
-      if ((this.formData.selected || this.formData.selected !== '' || this.formData.checked)
-        && (this.formData.picked || this.formData.anotherTheme) && this.formData.text) {
-        this.isActive = false;
-      }
-      return this.isActive;
     },
   },
 };
