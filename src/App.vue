@@ -8,13 +8,13 @@
         class="form"
         action="#"
         @submit="onSubmit">
-        <div class="form__cover">
-          <h2 class="form__title">
+        <fieldset class="form__cover">
+          <legend class="form__title">
             Ваш филиал
             <b class="form__require">
               *
             </b>
-          </h2>
+          </legend>
           <label class="select__label">
             <select
               class="form__select border"
@@ -45,15 +45,15 @@
             <span class="form__checkbox"></span>
             Онлайн
           </label>
-        </div>
+        </fieldset>
 
-        <div class="form__cover">
-          <h2 class="form__title">
+        <fieldset class="form__cover">
+          <legend class="form__title">
             Тема обращения
             <b class="form__require">
               *
             </b>
-          </h2>
+          </legend>
           <label class="form__label label__radio">
             <input
               class="form__theme"
@@ -115,15 +115,15 @@
               :required="!formData.theme"
             >
           </label>
-        </div>
+        </fieldset>
 
-        <div class="form__cover">
-          <h2 class="form__title">
+        <fieldset class="form__cover">
+          <legend class="form__title">
             Описание проблемы
             <b class="form__require">
               *
             </b>
-          </h2>
+          </legend>
           <label class="form__label">
             <textarea
               class="form__textarea border"
@@ -135,12 +135,12 @@
               required>
             </textarea>
           </label>
-        </div>
+        </fieldset>
 
-        <div class="form__cover">
-          <h2 class="form__title">
+        <fieldset class="form__cover">
+          <legend class="form__title">
             Загрузка документов
-          </h2>
+          </legend>
           <p class="form__text">
             Приложите, пожалуйста, полноэкранный скриншот.
             <br/>Это поможет быстрее решить проблему.
@@ -151,7 +151,7 @@
             name="file"
             @change="onFileSelected"
           >
-        </div>
+        </fieldset>
         <input
           class="form__submit"
           type="submit"
@@ -238,7 +238,7 @@ export default {
     onFileSelected(event) {
       const file = event.target.files[0];
       const fd = new FormData();
-      fd.append('file', file);
+      fd.append('file', file, 'file');
       this.formData.selectedFile = fd;
     },
     onSubmit(event) {
@@ -313,7 +313,9 @@ export default {
 .form__cover {
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin: 0 0 30px;
+  padding: 0;
+  border: none;
 }
 
 .form__cover:nth-child(3) {
@@ -333,6 +335,7 @@ export default {
   font-size: 18px;
   font-weight: normal;
   color: #49423d;
+  padding: 0;
 }
 
 .form__select {
