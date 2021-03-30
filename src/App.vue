@@ -237,13 +237,19 @@ export default {
     },
     onFileSelected(event) {
       const file = event.target.files[0];
-      const fd = new FormData();
-      fd.append('file', file, 'file');
-      this.formData.selectedFile = fd;
+      this.formData.selectedFile = file;
     },
     onSubmit(event) {
       event.preventDefault();
-      this.sendForm(this.formData);
+      console.log(this.formData);
+      const fd = new FormData();
+      fd.append('city', this.formData.city);
+      fd.append('online', this.formData.online);
+      fd.append('theme', this.formData.theme);
+      fd.append('anotherTheme', this.formData.anotherTheme);
+      fd.append('text', this.formData.text);
+      fd.append('file', this.formData.selectedFile);
+      this.sendForm(fd);
       this.formData = {
         online: null,
         theme: null,
