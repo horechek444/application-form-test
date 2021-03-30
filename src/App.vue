@@ -150,6 +150,7 @@
             type="file"
             name="file"
             @change="onFileSelected"
+            ref="fileUpload"
           >
         </fieldset>
         <input
@@ -258,6 +259,7 @@ export default {
         text: '',
         selectedFile: null,
       };
+      this.$refs.fileUpload.value = null;
     },
   },
 };
