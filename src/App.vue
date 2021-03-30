@@ -243,11 +243,11 @@ export default {
       event.preventDefault();
       console.log(this.formData);
       const fd = new FormData();
-      fd.append('city', this.formData.city);
-      fd.append('online', this.formData.online);
-      fd.append('theme', this.formData.theme);
-      fd.append('anotherTheme', this.formData.anotherTheme);
-      fd.append('text', this.formData.text);
+      fd.append('city', JSON.stringify(this.formData.city));
+      fd.append('online', JSON.stringify(this.formData.online));
+      fd.append('theme', JSON.stringify(this.formData.theme));
+      fd.append('anotherTheme', JSON.stringify(this.formData.anotherTheme));
+      fd.append('text', JSON.stringify(this.formData.text));
       fd.append('file', this.formData.selectedFile);
       this.sendForm(fd);
       this.formData = {
