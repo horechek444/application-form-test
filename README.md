@@ -1,5 +1,7 @@
 # application-form-task
 
+Ссылка, по которой можно ознакомиться с проектом https://application-form-test.vercel.app
+
 ## Project setup
 ```
 npm install
