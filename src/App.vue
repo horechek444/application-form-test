@@ -243,7 +243,6 @@ export default {
     },
     onSubmit(event) {
       event.preventDefault();
-      console.log(this.formData);
       this.sendForm(this.formData);
       this.formData = {
         online: null,
